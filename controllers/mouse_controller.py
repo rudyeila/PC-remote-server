@@ -20,3 +20,5 @@ class MouseController:
 
     def move_mouse(self, x: int, y: int, absolute=True, duration=0):
         mouse.move(x, y, absolute, duration)
+
+    
