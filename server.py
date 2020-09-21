@@ -15,4 +15,4 @@ def hello_world():
 api.add_resource(Mouse, '/mouse')
 
 
-app.run(debug=True, host='0.0.0.0', port=80, threaded=True,)
+app.run(host='0.0.0.0', port=80, threaded=True,)
