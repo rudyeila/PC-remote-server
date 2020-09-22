@@ -1,12 +1,10 @@
 from flask import make_response, request
 from flask_restful import Resource, reqparse
 
-from controllers.mouse_controller import MouseController
+import controllers.mouse_controller as mouseController
 from utils.errors import error_response
 
-
-class Mouse(Resource):
-    mouseController = MouseController()
+class MouseButtons(Resource):
 
     def __init__(self):
         self.__parser = reqparse.RequestParser()
@@ -28,7 +26,7 @@ class Mouse(Resource):
 
     def get(self):
         try:
-            pos_x, pos_y = Mouse.mouseController.get_position()
+            pos_x, pos_y = mouseController.get_position()
             return {'data': {
                 'pos_x': pos_x,
                 'pos_y': pos_y,
@@ -40,16 +38,16 @@ class Mouse(Resource):
         try:
             body = request.get_json()
             print(body)
-            if ('action' not in body):
-                return {"error": "Invalid Syntax. You must provide an action to perform on the mouse resource"}, 400
+            # if ('action' not in body):
+            #     return {"error": "Invalid Syntax. You must provide an action to perform on the mouse resource"}, 400
             action = body['action']
             if (action == "MOVE"):
                 reqbody = self.__move_parser.parse_args()
-                Mouse.mouseController.move_mouse(
+                mouseController.move_mouse(
                     reqbody.x, reqbody.y, reqbody.absolute, reqbody.duration)
                 return self.get()
 
-            result = Mouse.mouseController.perform_action(action)
+            result = mouseController.perform_action(action)
             if (result):
                 return {"data": {"action": action, "result": "success"}}, 200
             return error_response("undefined action", 400)
