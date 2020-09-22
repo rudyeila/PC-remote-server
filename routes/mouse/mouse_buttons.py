@@ -7,24 +7,23 @@ from controllers.mouse_controller import MouseClicks
 from utils.errors import error_response
 
 
+__parser = reqparse.RequestParser()
+__parser.add_argument(
+    'action',
+    type=str,
+    choices=[MouseClicks.LEFT_CLICK, MouseClicks.RIGHT_CLICK,
+             MouseClicks.DOUBLE_CLICK, MouseClicks.MIDDLE_CLICK],
+    required=True,
+    help='The action to perform on the mouse resource'
+)
+
+
 class MouseButtons(Resource):
-
-    def __init__(self):
-        self.__parser = reqparse.RequestParser()
-        self.__parser.add_argument(
-            'action',
-            type=str,
-            choices=[MouseClicks.LEFT_CLICK, MouseClicks.RIGHT_CLICK,
-                     MouseClicks.DOUBLE_CLICK, MouseClicks.MIDDLE_CLICK],
-            required=True,
-            help='The action to perform on the mouse resource'
-        )
-
 
     """Perform a mouse click action """
     def post(self):
         try:
-            args = self.__parser.parse_args()
+            args = __parser.parse_args()
             result = mouseController.perform_action(args.action)
             if (result):
                 return {"data": {"action": args.action, "result": "success"}}, 200
