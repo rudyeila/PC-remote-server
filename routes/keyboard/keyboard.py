@@ -1,16 +1,19 @@
 from flask_restful import Resource, reqparse
 
-from 
+import controllers.keyboard_controller as keyboardController
 from utils.errors import error_response
 
-__parser = reqparse.RequestParser()
-__parser.add_argument("hotkey", type=str or int, required=True)
+_parser = reqparse.RequestParser()
+_parser.add_argument("hotkey", type=str or int, required=True)
+_parser.add_argument("hold", type=bool, default=False)
+
 
 class Keyboard(Resource):
-    
+
     def post(self):
         try:
-            args = __parser.parse_args()
-            keyboard.press_and_release(args.hotkey)
-        except Exception as err: 
+            args = _parser.parse_args()
+            keyboardController.handle_request(args)
+            return {"data": {"status": "success"}}, 200
+        except Exception as err:
             return error_response(err)
