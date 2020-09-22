@@ -5,11 +5,10 @@ from typing import Tuple
 import mouse
 
 
-class MouseClicks(Enum):
-    LEFT_CLICK = 0
-    RIGHT_CLICK = 1
-    MIDDLE_CLICK = 2
-    DOUBLE_CLICK = 3
+LEFT_CLICK = "LEFT_CLICK"
+RIGHT_CLICK = "RIGHT_CLICK"
+MIDDLE_CLICK = "MIDDLE_CLICK"
+DOUBLE_CLICK = "DOUBLE_CLICK"
 
 
 
@@ -24,20 +23,28 @@ def get_position() -> Tuple[int, int]:
     """
     return mouse.get_position()
 
-def move_mouse(x: int, y: int, absolute=True, duration=0):
+def move(x: int, y: int, absolute=True, duration=0):
+    """Moves the mouse to the new coordinates. 
+
+    Args:
+        x (int): The new X (coordinate/offset) of the mouse.
+        y (int): The new Y (coordinate/offset) of the mouse.
+        absolute (bool, optional): Whether the new coordinates are absolute or simply offsets. Defaults to True.
+        duration (int, optional): The animation duration of the mouse movements. Defaults to 0.
+    """
     mouse.move(x, y, absolute, duration)
 
 def perform_action(action: str):  # Change action type from string to predefined costants
-    if (action == MouseClicks.LEFT_CLICK):
+    if (action == LEFT_CLICK):
         mouse.click()
         return True
-    elif (action == MouseClicks.RIGHT_CLICK):
+    elif (action == RIGHT_CLICK):
         mouse.click(mouse.RIGHT)
         return True
-    elif (action == MouseClicks.MIDDLE_CLICK):
+    elif (action == MIDDLE_CLICK):
         mouse.click(mouse.MIDDLE)
         return True
-    elif (action == MouseClicks.DOUBLE_CLICK):
+    elif (action == DOUBLE_CLICK):
         mouse.double_click()
         return True
     else:
