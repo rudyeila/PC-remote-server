@@ -29,7 +29,7 @@ class MousePosition(Resource):
         except Exception as err:
             return error_response(err, 500)
 
-    def put(self):
+    def post(self):
         try:
             reqbody = __parser.parse_args()
             mouseController.move_mouse(
