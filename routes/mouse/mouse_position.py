@@ -15,7 +15,7 @@ class MousePosition(Resource):
         self.__parser.add_argument('y', type=int, required=True,
                                         help='The new Y coordinate of the mouse')
         self.__parser.add_argument(
-            'absolute', default=True, type=bool, help='Should the new mouse coordinates be absolute or relative?')
+            'absolute', default=False, type=bool, help='Should the new mouse coordinates be absolute or relative?')
         self.__parser.add_argument(
             'duration', default=0, type=int, help='The duration of the movement animation, if required.')
 
