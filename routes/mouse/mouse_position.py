@@ -6,18 +6,18 @@ import controllers.mouse_controller as mouseController
 from utils.errors import error_response
 
 
-class MousePosition(Resource):
+__parser = reqparse.RequestParser()
+__parser.add_argument('x', type=int, required=True,
+                      help='The new X coordinate of the mouse')
+__parser.add_argument('y', type=int, required=True,
+                      help='The new Y coordinate of the mouse')
+__parser.add_argument(
+    'absolute', default=False, type=bool, help='Should the new mouse coordinates be absolute or relative?')
+__parser.add_argument(
+    'duration', default=0, type=int, help='The duration of the movement animation, if required.')
 
-    def __init__(self):
-        self.__parser = reqparse.RequestParser()
-        self.__parser.add_argument('x', type=int, required=True,
-                                        help='The new X coordinate of the mouse')
-        self.__parser.add_argument('y', type=int, required=True,
-                                        help='The new Y coordinate of the mouse')
-        self.__parser.add_argument(
-            'absolute', default=False, type=bool, help='Should the new mouse coordinates be absolute or relative?')
-        self.__parser.add_argument(
-            'duration', default=0, type=int, help='The duration of the movement animation, if required.')
+
+class MousePosition(Resource):
 
     def get(self):
         try:
@@ -31,13 +31,9 @@ class MousePosition(Resource):
 
     def put(self):
         try:
-            reqbody = self.__parser.parse_args()
-            mouseController.move_mouse(reqbody.x, reqbody.y, reqbody.absolute, reqbody.duration)
+            reqbody = __parser.parse_args()
+            mouseController.move_mouse(
+                reqbody.x, reqbody.y, reqbody.absolute, reqbody.duration)
             return self.get()
-
-            # result = MousePosition.mouseController.perform_action(action)
-            # if (result):
-            #     return {"data": {"action": action, "result": "success"}}, 200
-            # return error_response("undefined action", 400)
         except Exception as err:
             return error_response(err, 500)
