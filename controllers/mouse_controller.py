@@ -11,8 +11,6 @@ MIDDLE_CLICK = "MIDDLE_CLICK"
 DOUBLE_CLICK = "DOUBLE_CLICK"
 
 
-
-
 def get_position() -> Tuple[int, int]:
     """Get the current x and y coordinates of the mouse
 
@@ -22,6 +20,7 @@ def get_position() -> Tuple[int, int]:
         (x, y) coordinates of the mouse
     """
     return mouse.get_position()
+
 
 def move(x: int, y: int, absolute=True, duration=0):
     """Moves the mouse to the new coordinates. 
@@ -34,7 +33,16 @@ def move(x: int, y: int, absolute=True, duration=0):
     """
     mouse.move(x, y, absolute, duration)
 
-def perform_action(action: str):  # Change action type from string to predefined costants
+
+def perform_action(action: str) -> bool:
+    """Performs a click action on the mouse
+
+    Args:
+        action (str): One of ["LEFT_CLICK","RIGHT_CLICK","DOUBLE_CLICK","MIDDLE_CLICK"]
+
+    Returns:
+        bool: True if the action was performed. False otherwise
+    """
     if (action == LEFT_CLICK):
         mouse.click()
         return True
