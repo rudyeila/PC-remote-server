@@ -25,7 +25,7 @@ class MouseButtons(Resource):
             args = _parser.parse_args()
             result = mouseController.perform_action(args.action)
             if (result):
-                return {"data": {"action": args.action, "result": "success"}}, 200
+                return {"action": args.action, "result": "success"}, 200
             return error_response("undefined action", 400)
         except Exception as err:
             print(err)

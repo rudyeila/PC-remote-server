@@ -6,9 +6,9 @@ from utils.errors import error_response
 
 _parser = reqparse.RequestParser()
 _parser.add_argument('x', type=int, required=True,
-                      help='The new X coordinate of the mouse')
+                     help='The new X coordinate of the mouse')
 _parser.add_argument('y', type=int, required=True,
-                      help='The new Y coordinate of the mouse')
+                     help='The new Y coordinate of the mouse')
 _parser.add_argument(
     'absolute', default=False, type=bool, help='Should the new mouse coordinates be absolute or relative?')
 _parser.add_argument(
@@ -20,10 +20,10 @@ class MousePosition(Resource):
     def get(self):
         try:
             pos_x, pos_y = mouseController.get_position()
-            return {'data': {
-                'pos_x': pos_x,
-                'pos_y': pos_y,
-            }}
+            return {
+                'x': pos_x,
+                'y': pos_y,
+            }
         except Exception as err:
             return error_response(err, 500)
 

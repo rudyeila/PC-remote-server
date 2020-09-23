@@ -14,6 +14,6 @@ class Keyboard(Resource):
         try:
             args = _parser.parse_args()
             keyboardController.handle_request(args)
-            return {"data": {"status": "success"}}, 200
+            return {"status": "success"}, 200
         except Exception as err:
             return error_response(err)
