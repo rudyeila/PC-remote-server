@@ -14,7 +14,7 @@ class VolumeController(IVolumeController):
     else:
         raise NotImplementedError(
             f"No volume controller is currently implemented for OS: {platform.system()}"
-        )
+        )  
 
     @classmethod
     def toggle_mute(cls):
