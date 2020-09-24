@@ -14,36 +14,46 @@ class VolumeController:
 
     CoInitialize()
     __devices = AudioUtilities.GetSpeakers()
-    __interface = __devices.Activate(
-        IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    __interface = __devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     __volume = cast(__interface, POINTER(IAudioEndpointVolume))
     __sessions = AudioUtilities.GetAllSessions()
 
     @classmethod
-    def toggleMute(cls):
-        if (cls.mute_status):
-            cls.unmute()
-        else: 
-            cls.mute()
+    def refresh_devices(cls):
+        CoInitialize()
+        cls.__devices = AudioUtilities.GetSpeakers()
+        cls.__interface = __devices.Activate(
+            IAudioEndpointVolume._iid_, CLSCTX_ALL, None
+        )
+        cls.__volume = cast(__interface, POINTER(IAudioEndpointVolume))
+        cls.__sessions = AudioUtilities.GetAllSessions()
 
     @classmethod
-    def mute(cls):
+    def toggle_mute(cls):
+        if cls.mute_status:
+            cls.__unmute()
+        else:
+            cls.__mute()
+
+    @classmethod
+    def __mute(cls):
         cls.__volume_before_muting = cls.get_volume()
         cls.set_volume(0)
         cls.mute_status = True
 
     @classmethod
-    def unmute(cls):
+    def __unmute(cls):
         cls.set_volume(cls.__volume_before_muting)
         cls.mute_status = False
 
     @classmethod
     def set_mute(cls, mute: bool):
-        print(f"set_mute: {mute}")
-        if (mute):
-            cls.mute()
+        if not type(mute) == bool:
+            raise ValueError(f"Illegal value when setting mute: {mute}")
+        if mute:
+            cls.__mute()
         else:
-            cls.unmute()
+            cls.__unmute()
 
     @classmethod
     def get_mute(cls):
@@ -56,7 +66,9 @@ class VolumeController:
 
     @classmethod
     def set_volume(cls, newVolume: float):
-        if (newVolume < 0 or newVolume > 1):
+        if not isinstance(newVolume, (int, float)):
+            raise ValueError(f"Illegal value when setting volume: {newVolume}")
+        if newVolume < 0 or newVolume > 1:
             raise ValueError("Volume value must be between 0 and 1")
         cls.__volume.SetMasterVolumeLevelScalar(newVolume, None)
         return True

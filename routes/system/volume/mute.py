@@ -20,7 +20,7 @@ class Mute(Resource):
             if (args is not None and 'mute' in args):
                 VolumeController.set_mute(args['mute'])
             else: 
-                VolumeController.toggleMute()
+                VolumeController.toggle_mute()
             return self.get()
         except Exception as err:
             return error_response(err)
