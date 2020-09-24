@@ -2,18 +2,31 @@ import pytest
 import json
 import sys
 
-sys.path.insert(0, "../")
-
 
 # https://dev.to/po5i/how-to-add-basic-unit-test-to-a-python-flask-app-using-pytest-1m7a
-
-
 def test_base(app, client):
     """Make sure server is running"""
     res = client.get("/")
     assert res.status_code == 200
     expected = "Hello, World!"
     assert expected == res.get_data(as_text=True)
+
+
+class TestVolumeRoute:
+    VOLUME = "/system/volume"
+
+    def test_get_volume(self, app, client):
+        # Test route to get volume level
+        res = client.get(TestVolumeRoute.VOLUME)
+        assert res.status_code == 200
+
+        # Make sure volume is part of of the response and the value is 0 <= volume <= 1.0
+        res_json = json.loads(res.get_data(as_text=True))
+        volume = res_json.get("volume")
+        mute = res_json.get("mute")
+        assert (volume is not None) and (mute is not None)
+        assert volume >= 0.0 and volume <= 1.0
+        assert isinstance(mute, int)
 
 
 class TestVolumeLevelRoute:
@@ -44,6 +57,27 @@ class TestVolumeLevelRoute:
 
         # Add margin for error due to numbers being float. We only care for the first few digits after the comma
         assert abs(expected - volume) < 0.00001
+
+    def test_set_volume_illegal_value(self, app, client):
+        # get current volume
+        res = client.get(TestVolumeLevelRoute.VOLUME_LEVEL)
+        assert res.status_code == 200
+
+        res_json = json.loads(res.get_data(as_text=True))
+        volume_old = res_json.get("volume")
+
+        # try setting illegal value to volume
+        res = client.put(TestVolumeLevelRoute.VOLUME_LEVEL, json={"volume": -0.5})
+        assert res.status_code == 500
+
+        # get volume again to make sure it didnt change
+        res = client.get(TestVolumeLevelRoute.VOLUME_LEVEL)
+        assert res.status_code == 200
+        res_json = json.loads(res.get_data(as_text=True))
+        volume_new = res_json.get("volume")
+
+        # Make sure volume didn't change
+        assert volume_old == volume_new
 
 
 class TestMuteRoute:
