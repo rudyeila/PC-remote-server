@@ -16,32 +16,58 @@ def test_base(app, client):
     assert expected == res.get_data(as_text=True)
 
 
+class TestVolumeLevelRoute:
+    VOLUME_LEVEL = "/system/volume/level"
+
+    def test_get_volume(self, app, client):
+        # Test route to get volume level
+        res = client.get(TestVolumeLevelRoute.VOLUME_LEVEL)
+        assert res.status_code == 200
+
+        # Make sure volume is part of of the response and the value is 0 <= volume <= 1.0
+        res_json = json.loads(res.get_data(as_text=True))
+        volume = res_json.get("volume")
+        assert volume is not None
+        assert volume >= 0.0 and volume <= 1.0
+
+    def test_set_volume(self, app, client):
+        # Make sure volume is unmuted.
+        res = client.put(TestVolumeLevelRoute.VOLUME_LEVEL, json={"volume": 0.1})
+        assert res.status_code == 200
+
+        # Make sure volume is part of of the response and the value is almost equal to 0.1
+        # Almost equal because floating point numbers can differ in the trailing digits
+        res_json = json.loads(res.get_data(as_text=True))
+        volume = res_json.get("volume")
+        assert volume is not None
+        expected = 0.1
+
+        # Add margin for error due to numbers being float. We only care for the first few digits after the comma
+        assert abs(expected - volume) < 0.00001
+
 
 class TestMuteRoute:
     MUTE = "/system/volume/mute"
 
-    # Test mute 
     def test_get_mute(self, app, client):
         # Make sure volume is unmuted.
         res = client.post(TestMuteRoute.MUTE, json={"mute": False})
-        print(res.status_code)
-        print(res.data)
         assert res.status_code == 200
 
-
+        # Test route to get mute status
         res = client.get(TestMuteRoute.MUTE)
         assert res.status_code == 200
         expected = {"mute": False}
         assert expected == json.loads(res.get_data(as_text=True))
 
     def test_toggle_mute(self, app, client):
-        # First read current mute status 
+        # First read current mute status
         res = client.get(TestMuteRoute.MUTE)
         body = json.loads(res.get_data(as_text=True))
         mute_status = body.get("mute")
         assert mute_status is not None, "Failed to get mute status"
 
-        # Toggle mute 
+        # Toggle mute
         res = client.post(TestMuteRoute.MUTE)
         assert res.status_code == 200
 
@@ -57,13 +83,13 @@ class TestMuteRoute:
         res = client.post(TestMuteRoute.MUTE, json={"mute": False})
         assert res.status_code == 200
 
-        # Mute 
+        # Mute
         res = client.post(TestMuteRoute.MUTE, json={"mute": True})
         assert res.status_code == 200
         expected = {"mute": True}
         assert expected == json.loads(res.get_data(as_text=True))
 
-        # Unmute 
+        # Unmute
         res = client.post(TestMuteRoute.MUTE, json={"mute": False})
         assert res.status_code == 200
         expected = {"mute": False}
