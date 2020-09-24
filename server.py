@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Resource, Api
 
+from routes.mouse.mouse import Mouse
 from routes.mouse.mouse_position import MousePosition
 from routes.mouse.mouse_buttons import MouseButtons
 from routes.keyboard.keyboard import Keyboard
@@ -23,11 +24,14 @@ api.add_resource(Level, '/system/volume/level')
 api.add_resource(Mute, '/system/volume/mute')
 
 # Mouse routes
+api.add_resource(Mouse, '/mouse')
 api.add_resource(MousePosition, '/mouse/position')
 api.add_resource(MouseButtons, '/mouse/buttons')
 
 # Keyboard routes
 api.add_resource(Keyboard, '/keyboard')
+
+
 
 
 if __name__ == '__main__':
