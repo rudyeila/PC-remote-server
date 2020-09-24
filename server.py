@@ -16,6 +16,7 @@ api = Api(app)
 def hello_world():
     return 'Hello, World!'
 
+
 # System routes
 api.add_resource(Volume, '/system/volume')
 api.add_resource(Level, '/system/volume/level')
@@ -29,5 +30,5 @@ api.add_resource(MouseButtons, '/mouse/buttons')
 api.add_resource(Keyboard, '/keyboard')
 
 
-
-app.run(host='0.0.0.0', port=80, threaded=True, debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80, threaded=True, debug=True)
