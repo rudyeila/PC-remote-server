@@ -1,24 +1,20 @@
 import platform
-from ctypes import POINTER, cast
-from comtypes import CLSCTX_ALL
-
-from pythoncom import CoInitialize
-from pycaw.pycaw import AudioUtilities, ISimpleAudioVolume, IAudioEndpointVolume
 
 from .volume_controller_interface import IVolumeController
 from .windows_volume_controller import WinVolumeController
 
-isWindows = True if platform.system() == 'Windows' else False
+isWindows = True if platform.system() == "Windows" else False
+
 
 class VolumeController(IVolumeController):
 
     OS_vol_controller: IVolumeController
-    if (isWindows):
+    if isWindows:
         OS_vol_controller = WinVolumeController
-    else: 
-        raise NotImplementedError(f"No volume controller is currently implemented for OS: {platform.system()}")
-        
-
+    else:
+        raise NotImplementedError(
+            f"No volume controller is currently implemented for OS: {platform.system()}"
+        )
 
     @classmethod
     def toggle_mute(cls):
