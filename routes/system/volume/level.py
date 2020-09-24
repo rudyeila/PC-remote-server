@@ -14,7 +14,7 @@ class Level(Resource):
         except Exception as err:
             return error_response(err)
 
-    def put(self):
+    def post(self):
         try:
             args = request.get_json()
             VolumeController.set_volume(args['volume'])

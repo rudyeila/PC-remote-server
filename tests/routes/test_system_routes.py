@@ -44,7 +44,7 @@ class TestVolumeLevelRoute:
 
     def test_set_volume(self, app, client):
         # Make sure volume is unmuted.
-        res = client.put(self.VOLUME_LEVEL, json={"volume": 0.1})
+        res = client.post(self.VOLUME_LEVEL, json={"volume": 0.1})
         assert res.status_code == 200
 
         # Make sure volume is part of of the response and the value is almost equal to 0.1
@@ -66,7 +66,7 @@ class TestVolumeLevelRoute:
         volume_old = res_json.get("volume")
 
         # try setting illegal value to volume
-        res = client.put(self.VOLUME_LEVEL, json={"volume": -0.5})
+        res = client.post(self.VOLUME_LEVEL, json={"volume": -0.5})
         assert res.status_code == 500
 
         # get volume again to make sure it didnt change
