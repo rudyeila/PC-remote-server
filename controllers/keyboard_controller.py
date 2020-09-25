@@ -8,6 +8,9 @@ def hold(hotkey):
     """Presses and holds down a hotkey """
     keyboard.press(hotkey)
 
+def release(hotkey):
+    """releases a pressed down key """
+    keyboard.release(hotkey)
 
 def press_and_release(hotkey: str or int):
     """Sends OS events that perform the given *hotkey* hotkey.
