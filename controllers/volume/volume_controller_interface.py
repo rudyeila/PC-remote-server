@@ -3,7 +3,7 @@ import abc
 
 class IVolumeController(metaclass=abc.ABCMeta):
     @classmethod
-    def toggle_mute(cls):
+    def toggle_mute(cls) -> bool:
         """Toggles mute back and forth"""
         raise NotImplementedError
 

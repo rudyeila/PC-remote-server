@@ -23,8 +23,8 @@ class VolumeController(IVolumeController):
         )  
 
     @classmethod
-    def toggle_mute(cls):
-        cls.__OS_vol_controller.toggle_mute()
+    def toggle_mute(cls) -> bool:
+        return cls.__OS_vol_controller.toggle_mute()
 
     @classmethod
     def set_mute(cls, mute: bool):

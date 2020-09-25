@@ -39,6 +39,7 @@ class WinVolumeController(IVolumeController):
             cls.__unmute()
         else:
             cls.__mute()
+        return cls.mute_status
 
     @classmethod
     def __mute(cls):
