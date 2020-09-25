@@ -11,10 +11,10 @@ class VolumeControllerError(BaseException):
 
 class VolumeController(IVolumeController):
 
-    OS_vol_controller: IVolumeController
+    __OS_vol_controller: IVolumeController
     if isWindows:
         try:
-            OS_vol_controller = WinVolumeController
+            __OS_vol_controller = WinVolumeController
         except Exception: 
             raise VolumeControllerError("It seems like there are no sound devices available. ")
     else:
@@ -24,20 +24,20 @@ class VolumeController(IVolumeController):
 
     @classmethod
     def toggle_mute(cls):
-        cls.OS_vol_controller.toggle_mute()
+        cls.__OS_vol_controller.toggle_mute()
 
     @classmethod
     def set_mute(cls, mute: bool):
-        cls.OS_vol_controller.set_mute(mute)
+        cls.__OS_vol_controller.set_mute(mute)
 
     @classmethod
     def get_mute(cls) -> bool:
-        return cls.OS_vol_controller.get_mute()
+        return cls.__OS_vol_controller.get_mute()
 
     @classmethod
     def get_volume(cls) -> float:
-        return cls.OS_vol_controller.get_volume()
+        return cls.__OS_vol_controller.get_volume()
 
     @classmethod
     def set_volume(cls, newVolume: float) -> bool:
-        return cls.OS_vol_controller.set_volume(newVolume)
+        return cls.__OS_vol_controller.set_volume(newVolume)
