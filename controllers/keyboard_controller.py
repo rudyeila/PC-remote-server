@@ -34,3 +34,5 @@ def handle_request(args):
         hold(args.hotkey)
     else:
         press_and_release(args.hotkey)
+
+    

@@ -5,12 +5,18 @@ from .windows_volume_controller import WinVolumeController
 
 isWindows = True if platform.system() == "Windows" else False
 
+class VolumeControllerError(BaseException):
+    pass
+
 
 class VolumeController(IVolumeController):
 
     OS_vol_controller: IVolumeController
     if isWindows:
-        OS_vol_controller = WinVolumeController
+        try:
+            OS_vol_controller = WinVolumeController
+        except Exception: 
+            raise VolumeControllerError("It seems like there are no sound devices available. ")
     else:
         raise NotImplementedError(
             f"No volume controller is currently implemented for OS: {platform.system()}"
