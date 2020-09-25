@@ -14,6 +14,16 @@ class Keyboard(Resource):
         try:
             args = _parser.parse_args()
             keyboardController.handle_request(args)
-            return {"status": "success"}, 200
+
+            res_json = dict()
+            hold = args.get('hold')
+            hotkey = args.get('hotkey')
+            if (hold):
+                res_json["hold"] = hold
+            if (hotkey):
+                res_json["hotkey"] = hotkey
+            res_json["status"] = "success"
+
+            return res_json, 200
         except Exception as err:
             return error_response(err)
