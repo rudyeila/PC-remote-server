@@ -24,7 +24,6 @@ class WinVolumeController(IVolumeController):
     def __refresh_devices(cls):
         """Refreshes the sound devices before calling any other method. Usefull in case there were changes in the devices, e.g. plugging in headphones 
         """
-        # CoInitialize()
         cls.__devices = AudioUtilities.GetSpeakers()
         cls.__interface = cls.__devices.Activate(
             IAudioEndpointVolume._iid_, CLSCTX_ALL, None
@@ -39,7 +38,7 @@ class WinVolumeController(IVolumeController):
             cls.__unmute()
         else:
             cls.__mute()
-        return cls.mute_status
+        return cls.get_mute()
 
     @classmethod
     def __mute(cls):
@@ -64,13 +63,10 @@ class WinVolumeController(IVolumeController):
 
     @classmethod
     def get_mute(cls):
-        # cls.__refresh_devices()
-        print("get mute")
         return cls.mute_status
 
     @classmethod
     def get_volume(cls):
-        print("get volume")
         cls.__refresh_devices()
         volume = cls.__volume.GetMasterVolumeLevelScalar()
         return volume
