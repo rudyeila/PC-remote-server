@@ -24,4 +24,3 @@ run `run_tests.bat`
 For manual testing, you can use postman to make HTTP calls and test the server. You can find a simple documentation of the supported routes at the following link:
 
 https://documenter.getpostman.com/view/8436185/TVKJzFXu
-
